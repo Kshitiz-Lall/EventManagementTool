@@ -6,6 +6,7 @@ namespace Application.Activities
 {
   public class Details
     {
+        //Testing 
         public class Query : IRequest<Activity>
         {
             public Guid Id { get; set; }
