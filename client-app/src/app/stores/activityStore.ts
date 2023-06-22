@@ -12,7 +12,7 @@ export default class ActivityStore {
      selectedActivity: Activity | undefined = undefined;
      editMode = false;
      loading = false;
-     loadingInitial = true;
+     loadingInitial = false;
 
     constructor() {
         makeAutoObservable(this)
@@ -37,17 +37,23 @@ export default class ActivityStore {
                 this.setLoadingInitial(false);        
         }
     }
+  
 
     loadActivity = async (id: string) => {
         let activity = this.getActivity(id);
-        if (activity) this.selectedActivity = activity;
+        if (activity) {
+            this.selectedActivity = activity
+            return activity;
+        }
+        
         else {
             this.setLoadingInitial(true);
             try{
                 activity = await agent.Activities.details(id);
                 this.setActivity(activity);
-                this.selectedActivity = activity;
-                this.setLoadingInitial(false);
+                runInAction(() => this.selectedActivity = activity);
+                this.setLoadingInitial(false); 
+                return activity;
             }catch(error) {
                 console.log(error);
                 this.setLoadingInitial(false);
