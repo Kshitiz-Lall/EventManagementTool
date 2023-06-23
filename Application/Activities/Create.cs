@@ -8,6 +8,7 @@ namespace Application.Activities
 {
   public class Create
   {
+    //shubham
     public class Command : IRequest
     {
       public Activity Activity { get; set; }
@@ -28,6 +29,10 @@ namespace Application.Activities
         await _context.SaveChangesAsync();
         return Unit.Value;
       }
+    }
+
+    public void Print(){
+      
     }
   }
 }
