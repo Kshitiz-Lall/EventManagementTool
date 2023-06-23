@@ -7,9 +7,10 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useStore();
+  const { loadActivities, activityRegistry } = activityStore;
 
   useEffect(() => {
-    activityStore.loadActivities();
+    if (activityRegistry.size <= 1) loadActivities();
   }, [activityStore]); //we tell our use effect what we wanted to do when our application loads up So in this case, we want it to go and get some data from our API.
 
   if (activityStore.loadingInitial)
