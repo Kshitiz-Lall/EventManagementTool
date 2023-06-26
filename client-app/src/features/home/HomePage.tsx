@@ -8,13 +8,17 @@ export default function HomePage() {
         <Header as="h1" inverted>
           <Image
             size="massive"
-            src="/assets/logo.png"
+            src="/assets/genzeon-logo2.png"
             alt="logo"
             style={{ marginBottom: 12 }}
           />
-          Reactivities
+          Genzeon
         </Header>
-        <Header as="h2" inverted content="Welcome to Reactivites" />
+        <Header
+          as="h2"
+          inverted
+          content="Welcome to Genzeon Event Management"
+        />
         <Button as={Link} to="/activities" size="huge" inverted>
           Take me to Events
         </Button>

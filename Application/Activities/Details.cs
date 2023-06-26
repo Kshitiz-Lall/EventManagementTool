@@ -22,7 +22,9 @@ namespace Application.Activities
       }
       async Task<Activity> IRequestHandler<Query, Activity>.Handle(Query request, CancellationToken cancellationToken)
       {
-        return await _context.Activities.FindAsync(request.Id);
+        var activity = await _context.Activities.FindAsync(request.Id);
+        if (activity == null) throw new Exception("Activity not found");
+        return activity;
       }
     }
   }
