@@ -105,5 +105,10 @@ namespace Persistence
             await context.Activities.AddRangeAsync(activities);
             await context.SaveChangesAsync();
         }
+
+        public static Task SeedData(object context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
