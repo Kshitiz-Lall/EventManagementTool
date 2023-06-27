@@ -14,11 +14,11 @@ export default observer(function HomePage() {
         <Header as="h1" inverted>
           <Image
             size="massive"
-            src="/assets/logo.png"
+            src="/assets/genzeon-logo2.png"
             alt="logo"
             style={{ marginBottom: 12 }}
           />
-          Reactivities
+          Genzeon
         </Header>
         {userStore.isLoggedIn ? (
           <>
@@ -28,7 +28,7 @@ export default observer(function HomePage() {
               content={`Welcome back ${userStore.user?.displayName}`}
             />
             <Button as={Link} to="/activities" size="huge" inverted>
-              Go to activities!
+              Go to Activities!
             </Button>
           </>
         ) : (
