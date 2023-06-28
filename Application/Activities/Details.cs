@@ -4,7 +4,7 @@ using Domain;
 using MediatR;
 using Persistence;
 
-namespace Application.Activities
+namespace Application.Events
 {
   public class Details
   {

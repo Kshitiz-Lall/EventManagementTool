@@ -22,10 +22,10 @@ namespace Application.Activities
 
         _context = context;
       }
-      public async Task<Result<List<Activity>>> Handle(Query request, CancellationToken cancellationToken)
+      public async Task<Result<List<Activity>>> Handle(Query request, CancellationToken token)
       {
 
-        return Result<List<Activity>>.Success(await _context.Activities.ToListAsync(cancellationToken));
+        return Result<List<Activity>>.Success(await _context.Activities.ToListAsync(token));
       }
     }
   }

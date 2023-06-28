@@ -10,6 +10,7 @@ namespace Application.Activities
 {
   public class Create
   {
+    //shubham
     public class Command : IRequest<Result<Unit>>
     {
       public Activity Activity { get; set; }
@@ -22,7 +23,6 @@ namespace Application.Activities
         RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
       }
     }
-
     public class Handler : IRequestHandler<Command, Result<Unit>>
     {
       private readonly DataContext _context;
@@ -36,11 +36,15 @@ namespace Application.Activities
         _context.Activities.Add(request.Activity);
 
         var result = await _context.SaveChangesAsync() > 0;
+
         if (!result) return Result<Unit>.Failure("Failed to create activity");
-
-
         return Result<Unit>.Success(Unit.Value);
       }
+    }
+
+    public void Print()
+    {
+
     }
   }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Grid } from "semantic-ui-react";
 import ActivityList from "./ActivityList";
 import { useStore } from "../../../app/stores/store";
@@ -15,7 +15,7 @@ export default observer(function ActivityDashboard() {
   }, [activityStore]); //we tell our use effect what we wanted to do when our application loads up So in this case, we want it to go and get some data from our API.
 
   if (activityStore.loadingInitial)
-    return <LoadingComponent content="Loading app" />;
+    return <LoadingComponent content="Loading Activities..." />;
 
   return (
     <Grid>

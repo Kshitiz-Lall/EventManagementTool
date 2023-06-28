@@ -1,7 +1,13 @@
+import { observer } from "mobx-react-lite";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Header, Image, Segment } from "semantic-ui-react";
+import { Button, Container, Header, Segment, Image } from "semantic-ui-react";
+import { useStore } from "../../app/stores/store";
+import LoginForm from "../users/LoginForm";
+import RegisterForm from "../users/RegisterForm";
 
-export default function HomePage() {
+export default observer(function HomePage() {
+  const { userStore, modalStore } = useStore();
   return (
     <Segment inverted textAlign="center" vertical className="masthead">
       <Container text>
@@ -12,13 +18,38 @@ export default function HomePage() {
             alt="logo"
             style={{ marginBottom: 12 }}
           />
-          GENZEON
+          Genzeon
         </Header>
-        <Header as="h2" inverted content="Welcome To Event Management App " />
-        <Button as={Link} to="/activities" size="huge" inverted>
-          Take me to the Events!
-        </Button>
+        {userStore.isLoggedIn ? (
+          <>
+            <Header
+              as="h2"
+              inverted
+              content={`Welcome back ${userStore.user?.displayName}`}
+            />
+            <Button as={Link} to="/activities" size="huge" inverted>
+              Go to Activities!
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              onClick={() => modalStore.openModal(<LoginForm />)}
+              size="huge"
+              inverted
+            >
+              Login!
+            </Button>
+            <Button
+              onClick={() => modalStore.openModal(<RegisterForm />)}
+              size="huge"
+              inverted
+            >
+              Register
+            </Button>
+          </>
+        )}
       </Container>
     </Segment>
   );
-}
+});

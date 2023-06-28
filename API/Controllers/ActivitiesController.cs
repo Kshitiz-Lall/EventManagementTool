@@ -1,9 +1,8 @@
 using Application.Activities;
+using Application.Events;
 using Domain;
-using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace API.Controllers
 {
@@ -17,11 +16,15 @@ namespace API.Controllers
       return HandleResult(await Mediator.Send(new List.Query()));
     }
 
-    [HttpGet("{id}")]  //api/activities/fdfdskowskow
-    public async Task<IActionResult> GetActivity(Guid id)
-    {
 
-      return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
+
+    [HttpGet("{id}")]  //api/activities/fdfdskowskow
+    public async Task<ActionResult<Activity>> GetActivity(Guid id)
+    {
+      var result = await Mediator.Send(new Details.Query { Id = id });
+
+      return HandleResult(result);
+
     }
 
     [HttpPost]
@@ -35,7 +38,7 @@ namespace API.Controllers
     public async Task<IActionResult> EditActivity(Guid id, Activity activity)
     {
       activity.Id = id;
-      return HandleResult(await Mediator.Send(new Edit.Command { Activity = activity }));
+      return Ok(await Mediator.Send(new Edit.Command { Activity = activity }));
     }
 
     [HttpDelete("{id}")]

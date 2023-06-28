@@ -6,8 +6,8 @@ import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import ActivityDetailedHeader from "./ActivityDetailedHeader";
 import ActivityDetailedInfo from "./ActivityDetailedInfo";
-import ActivityDetailedSidebar from "./ActivityDetailedSidebar";
 import ActivityDetailedChat from "./ActivityDetailedChat";
+import ActivityDetailedSidebar from "./ActivityDetailedSidebar";
 
 export default observer(function ActivityDetails() {
   const { activityStore } = useStore();

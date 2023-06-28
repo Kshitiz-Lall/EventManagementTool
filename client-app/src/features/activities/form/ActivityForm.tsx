@@ -1,18 +1,18 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { Button, FormField, Header, Label, Segment } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
-import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { Button, Header, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
-import { v4 as uuid } from "uuid";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useStore } from "../../../app/stores/store";
+import { v4 as generateUUID } from "uuid";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MyTextInput from "../../../app/common/form/MyTextInput";
-import MyTextArea from "./MyTextArea";
-import MySelectInput from "./MySelectInput";
+import MyTextArea from "../../../app/common/form/MyTextArea";
+import MySelectInput from "../../../app/common/form/MySelectInput";
 import { categoryOptions } from "../../../app/common/options/categoryOptions";
-import MyDateInput from "./MyDateInput";
+import MyDateInput from "../../../app/common/form/MyDateInput";
+import { Activity } from "../../../app/models/activity";
 
 export default observer(function ActivityForm() {
   const { activityStore } = useStore();
@@ -39,12 +39,12 @@ export default observer(function ActivityForm() {
   });
 
   const validationSchema = Yup.object({
-    title: Yup.string().required("The event title is required"),
-    description: Yup.string().required("The event description is required"),
+    title: Yup.string().required("Title is required"),
+    description: Yup.string().required("Description is required"),
     category: Yup.string().required(),
-    date: Yup.string().required("Date is required"),
-    city: Yup.string().required(),
+    date: Yup.string().required("Date is required").nullable(),
     venue: Yup.string().required(),
+    city: Yup.string().required(),
   });
 
   useEffect(() => {
@@ -53,9 +53,12 @@ export default observer(function ActivityForm() {
 
   function handleFormSubmit(activity: Activity) {
     if (!activity.id) {
-      activity.id = uuid();
-      createActivity(activity).then(() =>
-        navigate(`/activities/${activity.id}`)
+      let newActivity = {
+        ...activity,
+        id: generateUUID(),
+      };
+      createActivity(newActivity).then(() =>
+        navigate(`/activities/${newActivity.id}`)
       );
     } else {
       updateActivity(activity).then(() =>
@@ -76,9 +79,8 @@ export default observer(function ActivityForm() {
       >
         {({ handleSubmit, isValid, isSubmitting, dirty }) => (
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
-            <MyTextInput name="title" placeholder="Title" />
-
-            <MyTextArea placeholder="Description" name="description" rows={3} />
+            <MyTextInput placeholder="Title" name="title" />
+            <MyTextArea rows={3} placeholder="Description" name="description" />
             <MySelectInput
               options={categoryOptions}
               placeholder="Category"
@@ -89,7 +91,7 @@ export default observer(function ActivityForm() {
               name="date"
               showTimeSelect
               timeCaption="time"
-              dateFormat="MMMM d, yyyy h:mm aa"
+              dateFormat={"MMMM d, yyyy h:mm aa"}
             />
             <Header content="Location Details" sub color="teal" />
             <MyTextInput placeholder="City" name="city" />
@@ -115,3 +117,6 @@ export default observer(function ActivityForm() {
     </Segment>
   );
 });
+function uuid() {
+  throw new Error("Function not implemented.");
+}

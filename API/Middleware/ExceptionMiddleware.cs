@@ -7,10 +7,11 @@ namespace API.Middleware
   public class ExceptionMiddleware
   {
     private readonly IHostEnvironment _env;
-    private ILogger<ExceptionMiddleware> _logger;
+    private readonly ILogger<ExceptionMiddleware> _logger;
     private readonly RequestDelegate _next;
 
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
+    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger,
+    IHostEnvironment env)
     {
       _env = env;
       _logger = logger;
@@ -27,10 +28,12 @@ namespace API.Middleware
       catch (Exception ex)
       {
         _logger.LogError(ex, ex.Message);
-        context.Request.ContentType = "application/json";
+        context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-        var response = _env.IsDevelopment() ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace?.ToString()) : new AppException(context.Response.StatusCode, "Internal Server Error");
+        var response = _env.IsDevelopment()
+        ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace?.ToString())
+        : new AppException(context.Response.StatusCode, "Internal Server Error");
 
         var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 

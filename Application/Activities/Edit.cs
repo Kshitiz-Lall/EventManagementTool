@@ -13,7 +13,6 @@ namespace Application.Activities
     {
       public Activity Activity { get; set; }
     }
-
     public class CommandValidator : AbstractValidator<Command>
     {
       public CommandValidator()

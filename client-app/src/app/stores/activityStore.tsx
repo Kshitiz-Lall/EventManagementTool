@@ -71,6 +71,7 @@ export default class ActivityStore {
   };
 
   private setActivity = (activity: Activity) => {
+    // activity.date = activity.date.split("T")[0];
     activity.date = new Date(activity.date!);
     this.activityRegistry.set(activity.id, activity);
   };
