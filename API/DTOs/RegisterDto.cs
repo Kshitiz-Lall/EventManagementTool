@@ -7,13 +7,15 @@ namespace API.DTOs
     [Required]
     [EmailAddress]
     public string Email { get; set; }
+
     [Required]
-    // [RegularExpression("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$",
-    // ErrorMessage = "Password must be complex")]
+    [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()])(?!.*\\s).{8,}$", ErrorMessage = "Minimum 8 characters and at least one uppercase letter, one lowercase letter, one digit, and one special character")]
     public string Password { get; set; }
+
     [Required]
     public string DisplayName { get; set; }
+
     [Required]
-    public string UserName { get; set; }
+    public string Username { get; set; }
   }
 }
