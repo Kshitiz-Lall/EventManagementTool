@@ -9,55 +9,52 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-
   [ApiController]
   [Route("api/[controller]")]
   public class AccountController : ControllerBase
   {
     private readonly UserManager<AppUser> _userManager;
     private readonly TokenService _tokenService;
-
     public AccountController(UserManager<AppUser> userManager, TokenService tokenService)
     {
-      _userManager = userManager;
       _tokenService = tokenService;
+      _userManager = userManager;
     }
-    [AllowAnonymous] // this will allow anonymous user to use webportal. 
+
+    [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<ActionResult<UserDto>> Login(LoginDto logindto)
+    public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-      // this will give user matching entered email.
-      var user = await _userManager.FindByEmailAsync(logindto.Email);
+      var user = await _userManager.Users.Include(p => p.Photos)
+          .FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
       if (user == null) return Unauthorized();
 
-      // this will return true or false value whether given password is valid for user or not.
-      var result = await _userManager.CheckPasswordAsync(user, logindto.Password);
+      var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
       if (result)
       {
         return CreateUserObject(user);
       }
+
       return Unauthorized();
     }
 
-    [AllowAnonymous] // this will allow anonymous user to use webportal. 
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
-      //in if part will check username is already taken or not
-      if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
-      {
-        ModelState.AddModelError("email", "Email taken");
-        return ValidationProblem();
-      }
-
       if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
       {
         ModelState.AddModelError("username", "Username taken");
         return ValidationProblem();
       }
 
+      if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
+      {
+        ModelState.AddModelError("email", "Email taken");
+        return ValidationProblem();
+      }
 
       var user = new AppUser
       {
@@ -80,7 +77,8 @@ namespace API.Controllers
     [HttpGet]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-      var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+      var user = await _userManager.Users.Include(p => p.Photos)
+          .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
 
       return CreateUserObject(user);
     }
@@ -90,9 +88,9 @@ namespace API.Controllers
       return new UserDto
       {
         DisplayName = user.DisplayName,
-        Image = null,
+        Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
         Token = _tokenService.CreateToken(user),
-        UserName = user.UserName
+        Username = user.UserName
       };
     }
   }
