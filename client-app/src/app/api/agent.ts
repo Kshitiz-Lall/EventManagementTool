@@ -14,7 +14,7 @@ const sleep = (delay: number) => {
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
-const responseBody = <T,>(response: AxiosResponse<T>) => response.data;
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 axios.interceptors.request.use((config) => {
   const token = store.commonStore.token;
@@ -65,12 +65,11 @@ axios.interceptors.response.use(
 );
 
 const requests = {
-  get: <T,>(url: string) => axios.get<T>(url).then(responseBody),
-  post: <T,>(url: string, body: {}) =>
+  get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+  post: <T>(url: string, body: {}) =>
     axios.post<T>(url, body).then(responseBody),
-  put: <T,>(url: string, body: {}) =>
-    axios.put<T>(url, body).then(responseBody),
-  del: <T,>(url: string) => axios.delete<T>(url).then(responseBody),
+  put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
+  del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
 const Activities = {
@@ -102,6 +101,12 @@ const Profiles = {
   },
   setMainPhoto: (id: string) => axios.post(`/photos/${id}/setMain`, {}),
   deletePhoto: (id: string) => axios.delete(`/photos/${id}`),
+  updateProfile: (profile: Partial<Profile>) =>
+    requests.put(`/profiles`, profile),
+  updateFollowing: (username: string) =>
+    requests.post(`/follow/${username}`, {}),
+  listFollowings: (username: string, predicate: string) =>
+    requests.get<Profile[]>(`/follow/${username}?predicate=${predicate}`),
 };
 
 const agent = {
