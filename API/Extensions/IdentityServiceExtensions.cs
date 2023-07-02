@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using API.Services;
 using Domain;
 using Infrastructure.Security;
@@ -16,7 +12,7 @@ namespace API.Extensions
   public static class IdentityServiceExtensions
   {
     public static IServiceCollection AddIdentityServices(this IServiceCollection services,
-     IConfiguration config)
+        IConfiguration config)
     {
       services.AddIdentityCore<AppUser>(opt =>
       {
@@ -28,24 +24,25 @@ namespace API.Extensions
       var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
 
       services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-      .AddJwtBearer(opt =>
-      {
-        opt.TokenValidationParameters = new TokenValidationParameters
-        {
-          ValidateIssuerSigningKey = true,
-          IssuerSigningKey = key,
-          ValidateIssuer = false,
-          ValidateAudience = false
-        };
-      });
+          .AddJwtBearer(opt =>
+          {
+            opt.TokenValidationParameters = new TokenValidationParameters
+            {
+              ValidateIssuerSigningKey = true,
+              IssuerSigningKey = key,
+              ValidateIssuer = false,
+              ValidateAudience = false
+            };
+          });
 
       services.AddAuthorization(opt =>
       {
         opt.AddPolicy("IsActivityHost", policy =>
-        {
-          policy.Requirements.Add(new IsHostRequirement());
-        });
+              {
+                policy.Requirements.Add(new IsHostRequirement());
+              });
       });
+
       services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
       services.AddScoped<TokenService>();
 
