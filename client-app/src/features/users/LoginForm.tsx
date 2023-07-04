@@ -19,8 +19,8 @@ export default observer(function LoginForm() {
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <Header
             as="h2"
-            content="Login to Reactivities"
-            color="teal"
+            content="Login to Genzeon Event"
+            color="blue"
             textAlign="center"
           />
           <MyTextInput placeholder="Email" name="email" />

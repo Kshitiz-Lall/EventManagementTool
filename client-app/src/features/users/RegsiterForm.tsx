@@ -35,8 +35,8 @@ export default observer(function RegsiterForm() {
         >
           <Header
             as="h2"
-            content="Sign up to Reactivities"
-            color="teal"
+            content="Sign up to Genzeon Event"
+            color="blue"
             textAlign="center"
           />
           <MyTextInput placeholder="Display Name" name="displayName" />

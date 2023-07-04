@@ -6,6 +6,7 @@ namespace API.DTOs
   {
     [Required]
     [EmailAddress]
+    // [RegularExpression("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")]
     public string Email { get; set; }
 
     [Required]
