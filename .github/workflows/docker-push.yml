@@ -22,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: trycatchlearn/reactivities:latest
+          tags: kshitizlall/reactivities:latest
   deploy:
     needs: docker
     name: Deploy app
